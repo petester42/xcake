@@ -30,9 +30,9 @@ module Xcake
     end
 
     def product_name
-      @product_name ||= name
+      @product_name
     end
-    
+
     #Configurable
 
     def default_settings
