@@ -11,6 +11,7 @@ module Xcake
     attr_accessor :include_files
     attr_accessor :exclude_files
     attr_accessor :system_frameworks
+    attr_accessor :product_name
 
     def initialize(&block)
       block.call(self) if block_given?
@@ -28,6 +29,10 @@ module Xcake
       (platform == :ios) ? ['Foundation', 'UIKit'] : ['Cocoa']
     end
 
+    def product_name
+      @product_name ||= name
+    end
+    
     #Configurable
 
     def default_settings
