@@ -34,6 +34,7 @@ module Xcake
 
       def leave_target(target)
         @native_target.add_system_frameworks(target.system_frameworks) if target.system_frameworks
+        @native_target.add_product_name(target.product_name) if target.product_name
       end
 
       def visit_configuration(configuration)
