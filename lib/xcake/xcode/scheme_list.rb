@@ -50,6 +50,8 @@ module Xcake
         case target.product_type
           when Xcodeproj::Constants::PRODUCT_TYPE_UTI[:application]
               create_schemes_for_application(target)
+          when Xcodeproj::Constants::PRODUCT_TYPE_UTI[:framework]
+              create_schemes_for_framework(target)
         end
       end
 
@@ -76,6 +78,29 @@ module Xcake
 
           schemes << scheme
         end
+      end
+
+      # Creates schemes based on a framework target
+      #
+      # @param    [Target] target
+      #           target to create framework schemes for
+      #
+      def create_schemes_for_framework(target)
+          scheme = Scheme.new
+
+          scheme.name = "#{target.name}"
+          scheme.add_build_target(target)
+          @xcschememanagement['SuppressBuildableAutocreation'][target.uuid] = {"primary" => true}
+
+          unit_test_target = project.find_unit_test_target_for_target(target)
+
+          if unit_test_target then
+            scheme.add_test_target(unit_test_target)
+            unit_test_target.add_dependency(target)
+            @xcschememanagement['SuppressBuildableAutocreation'][unit_test_target.uuid] = {"primary" => true}
+          end
+
+          schemes << scheme
       end
 
       # Writes scheme list data.
