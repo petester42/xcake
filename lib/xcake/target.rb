@@ -187,12 +187,39 @@ module Xcake
       }
     end
 
+    def platform_specific_settings(settings)
+      case platform
+        when :osx
+          settings["COMBINE_HIDPI_IMAGES"] = "YES"
+        when :ios, :watchos, :tvos
+          settings["ENABLE_BITCODE"] = "YES"
+        end
+
+        settings
+    end
+
+    def target_type_specific_settings(settings)
+      if type == :unit_test_bundle
+        settings["LD_RUNPATH_SEARCH_PATHS"] = ["$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks"]
+      end
+
+      settings
+    end
+
     def default_debug_settings
-      Xcodeproj::Project::ProjectHelper.common_build_settings(:debug, platform, deployment_target.to_s, type, language).merge!(default_settings)
+      settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:debug, platform, deployment_target.to_s, type, language).merge!(default_settings)
+      settings = platform_specific_settings settings
+      settings = target_type_specific_settings settings
+
+      settings
     end
 
     def default_release_settings
-      Xcodeproj::Project::ProjectHelper.common_build_settings(:release, platform, deployment_target.to_s, type, language).merge!(default_settings)
+      settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:release, platform, deployment_target.to_s, type, language).merge!(default_settings)
+      settings = platform_specific_settings settings
+      settings = target_type_specific_settings settings
+
+      settings
     end
 
     #Visitable

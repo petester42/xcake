@@ -61,35 +61,111 @@ module Xcake
       expect(target.include_files).to eq("./test/**/*.*")
     end
 
-    it "should have the correct default debug settings" do
-      target = Target.new
+    context "for application" do
+      it "should have the correct default debug settings" do
+        target = Target.new
 
-      target.platform = :ios
-      target.deployment_target = 8.0
-      target.type = :application
-      target.language = :objc
+        target.platform = :ios
+        target.deployment_target = 8.0
+        target.type = :application
+        target.language = :objc
 
-      settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:debug, target.platform, target.deployment_target.to_s, target.type, target.language)
-      settings.merge!({
-        "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+        settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:debug, target.platform, target.deployment_target.to_s, target.type, target.language)
+        settings["ENABLE_BITCODE"] = "YES"
+        settings.merge!({
+          "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+          })
+
+        expect(target.default_debug_settings).to eq(settings)
+      end
+
+      it "should have the correct default release settings" do
+        target = Target.new
+
+        target.platform = :ios
+        target.deployment_target = 8.0
+        target.type = :application
+        target.language = :objc
+
+        settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:release, target.platform, target.deployment_target.to_s, target.type, target.language)
+        settings["ENABLE_BITCODE"] = "YES"
+        settings.merge!({
+          "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
         })
-
-      expect(target.default_debug_settings).to eq(settings)
+        expect(target.default_release_settings).to eq(settings)
+      end
     end
 
-    it "should have the correct default release settings" do
-      target = Target.new
+    context "for framework" do
+      it "should have the correct default debug settings" do
+        target = Target.new
 
-      target.platform = :ios
-      target.deployment_target = 8.0
-      target.type = :application
-      target.language = :objc
+        target.platform = :ios
+        target.deployment_target = 8.0
+        target.type = :framework
+        target.language = :objc
 
-      settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:release, target.platform, target.deployment_target.to_s, target.type, target.language)
-      settings.merge!({
-        "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+        settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:debug, target.platform, target.deployment_target.to_s, target.type, target.language)
+        settings["ENABLE_BITCODE"] = "YES"
+        settings.merge!({
+          "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
         })
-      expect(target.default_release_settings).to eq(settings)
+
+        expect(target.default_debug_settings).to eq(settings)
+      end
+
+      it "should have the correct default release settings" do
+        target = Target.new
+
+        target.platform = :ios
+        target.deployment_target = 8.0
+        target.type = :framework
+        target.language = :objc
+
+        settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:release, target.platform, target.deployment_target.to_s, target.type, target.language)
+        settings["ENABLE_BITCODE"] = "YES"
+        settings.merge!({
+          "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+        })
+        expect(target.default_release_settings).to eq(settings)
+      end
+    end
+
+    context "for unit test bundle" do
+      it "should have the correct default debug settings" do
+        target = Target.new
+
+        target.platform = :ios
+        target.deployment_target = 8.0
+        target.type = :unit_test_bundle
+        target.language = :objc
+
+        settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:debug, target.platform, target.deployment_target.to_s, target.type, target.language)
+        settings["ENABLE_BITCODE"] = "YES"
+        settings["LD_RUNPATH_SEARCH_PATHS"] = ["$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks"]
+        settings.merge!({
+          "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+        })
+
+        expect(target.default_debug_settings).to eq(settings)
+      end
+
+      it "should have the correct default release settings" do
+        target = Target.new
+
+        target.platform = :ios
+        target.deployment_target = 8.0
+        target.type = :unit_test_bundle
+        target.language = :objc
+
+        settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:release, target.platform, target.deployment_target.to_s, target.type, target.language)
+        settings["ENABLE_BITCODE"] = "YES"
+        settings["LD_RUNPATH_SEARCH_PATHS"] = ["$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks"]
+        settings.merge!({
+          "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+        })
+        expect(target.default_release_settings).to eq(settings)
+      end
     end
   end
 end
