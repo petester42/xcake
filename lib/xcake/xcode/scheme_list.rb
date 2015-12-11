@@ -86,10 +86,9 @@ module Xcake
       #           target to create framework schemes for
       #
       def create_schemes_for_framework(target)
-        target.build_configurations.each do |c|
           scheme = Scheme.new
 
-          scheme.name = "#{target.name}-#{c.name}"
+          scheme.name = "#{target.name}"
           scheme.add_build_target(target)
           @xcschememanagement['SuppressBuildableAutocreation'][target.uuid] = {"primary" => true}
 
@@ -102,7 +101,6 @@ module Xcake
           end
 
           schemes << scheme
-          end
       end
 
       # Writes scheme list data.
