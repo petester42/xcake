@@ -200,7 +200,8 @@ module Xcake
 
     def target_type_specific_settings(settings)
       if type == :unit_test_bundle
-        settings["LD_RUNPATH_SEARCH_PATHS"] = ["$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks"]
+        frameworks_path = platform == :osx ? "../Frameworks" : "Frameworks"
+        settings["LD_RUNPATH_SEARCH_PATHS"] = ["$(inherited)", "@executable_path/#{frameworks_path}", "@loader_path/#{frameworks_path}"]
       end
 
       settings

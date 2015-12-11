@@ -78,8 +78,8 @@ module Xcake
           settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:debug, @target.platform, @target.deployment_target.to_s, @target.type, @target.language)
           settings["ENABLE_BITCODE"] = "YES"
           settings.merge!({
-            "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
-          })
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
 
           expect(@target.default_debug_settings).to eq(settings)
         end
@@ -89,8 +89,8 @@ module Xcake
           settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:release, @target.platform, @target.deployment_target.to_s, @target.type, @target.language)
           settings["ENABLE_BITCODE"] = "YES"
           settings.merge!({
-            "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
-          })
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
           expect(@target.default_release_settings).to eq(settings)
         end
       end
@@ -110,8 +110,8 @@ module Xcake
           settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:debug, @target.platform, @target.deployment_target.to_s, @target.type, @target.language)
           settings["ENABLE_BITCODE"] = "YES"
           settings.merge!({
-            "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
-          })
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
 
           expect(@target.default_debug_settings).to eq(settings)
         end
@@ -121,8 +121,8 @@ module Xcake
           settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:release, @target.platform, @target.deployment_target.to_s, @target.type, @target.language)
           settings["ENABLE_BITCODE"] = "YES"
           settings.merge!({
-            "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
-          })
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
           expect(@target.default_release_settings).to eq(settings)
         end
       end
@@ -143,8 +143,8 @@ module Xcake
           settings["ENABLE_BITCODE"] = "YES"
           settings["LD_RUNPATH_SEARCH_PATHS"] = ["$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks"]
           settings.merge!({
-            "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
-          })
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
 
           expect(@target.default_debug_settings).to eq(settings)
         end
@@ -155,8 +155,109 @@ module Xcake
           settings["ENABLE_BITCODE"] = "YES"
           settings["LD_RUNPATH_SEARCH_PATHS"] = ["$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks"]
           settings.merge!({
-            "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
-          })
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
+          expect(@target.default_release_settings).to eq(settings)
+        end
+      end
+    end
+
+    context "for osx" do
+
+      context "for application" do
+
+        before :each do
+          @target = Target.new
+          @target.platform = :osx
+          @target.deployment_target = 8.0
+          @target.language = :objc
+          @target.type = :application
+        end
+
+        it "should have the correct default debug settings" do
+
+          settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:debug, @target.platform, @target.deployment_target.to_s, @target.type, @target.language)
+          settings["COMBINE_HIDPI_IMAGES"] = "YES"
+          settings.merge!({
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
+
+          expect(@target.default_debug_settings).to eq(settings)
+        end
+
+        it "should have the correct default release settings" do
+
+          settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:release, @target.platform, @target.deployment_target.to_s, @target.type, @target.language)
+          settings["COMBINE_HIDPI_IMAGES"] = "YES"
+          settings.merge!({
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
+          expect(@target.default_release_settings).to eq(settings)
+        end
+      end
+
+      context "for framework" do
+
+        before :each do
+          @target = Target.new
+          @target.platform = :osx
+          @target.deployment_target = 8.0
+          @target.language = :objc
+          @target.type = :framework
+        end
+
+        it "should have the correct default debug settings" do
+
+          settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:debug, @target.platform, @target.deployment_target.to_s, @target.type, @target.language)
+          settings["COMBINE_HIDPI_IMAGES"] = "YES"
+          settings.merge!({
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
+
+          expect(@target.default_debug_settings).to eq(settings)
+        end
+
+        it "should have the correct default release settings" do
+
+          settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:release, @target.platform, @target.deployment_target.to_s, @target.type, @target.language)
+          settings["COMBINE_HIDPI_IMAGES"] = "YES"
+          settings.merge!({
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
+          expect(@target.default_release_settings).to eq(settings)
+        end
+      end
+
+      context "for unit test bundle" do
+
+        before :each do
+          @target = Target.new
+          @target.platform = :osx
+          @target.deployment_target = 8.0
+          @target.language = :objc
+          @target.type = :unit_test_bundle
+        end
+
+        it "should have the correct default debug settings" do
+
+          settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:debug, @target.platform, @target.deployment_target.to_s, @target.type, @target.language)
+          settings["COMBINE_HIDPI_IMAGES"] = "YES"
+          settings["LD_RUNPATH_SEARCH_PATHS"] = ["$(inherited)", "@executable_path/../Frameworks", "@loader_path/../Frameworks"]
+          settings.merge!({
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
+
+          expect(@target.default_debug_settings).to eq(settings)
+        end
+
+        it "should have the correct default release settings" do
+
+          settings = Xcodeproj::Project::ProjectHelper.common_build_settings(:release, @target.platform, @target.deployment_target.to_s, @target.type, @target.language)
+          settings["COMBINE_HIDPI_IMAGES"] = "YES"
+          settings["LD_RUNPATH_SEARCH_PATHS"] = ["$(inherited)", "@executable_path/../Frameworks", "@loader_path/../Frameworks"]
+          settings.merge!({
+                              "INFOPLIST_FILE" => "./$(PRODUCT_NAME)/Supporting Files/Info.plist"
+                          })
           expect(@target.default_release_settings).to eq(settings)
         end
       end
