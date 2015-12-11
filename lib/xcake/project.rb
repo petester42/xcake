@@ -124,11 +124,14 @@ module Xcake
         t.deployment_target = host_target.deployment_target
         t.language = host_target.language
 
-        if host_target.type == :application
-          t.all_configurations.settings["TEST_HOST"] = "$(BUILT_PRODUCTS_DIR)/#{host_target.name}.app/#{host_target.name}"
-          t.all_configurations.settings["BUNDLE_LOADER"] = "$(TEST_HOST)"
+        case host_target.type
+          when :application
+            t.all_configurations.settings["TEST_HOST"] = "$(BUILT_PRODUCTS_DIR)/#{host_target.name}.app/#{host_target.name}"
+            t.all_configurations.settings["BUNDLE_LOADER"] = "$(TEST_HOST)"
+          else
+            #no-op
         end
-        
+
         block.call(t) if block_given?
       end
 
