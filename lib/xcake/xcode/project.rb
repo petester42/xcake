@@ -90,9 +90,9 @@ module Xcake
           native_target.name = target.name
           native_target.product_name = target.name
           native_target.product_type = Xcodeproj::Constants::PRODUCT_TYPE_UTI[target.type]
-          configuration = Xcodeproj::Project::Object::XCConfigurationList
+          configuration = self.new(Xcodeproj::Project::Object::XCConfigurationList)
           configuration.default_configuration_is_visible = '1'
-          native_target.build_configuration_list = self.new(configuration)
+          native_target.build_configuration_list = configuration
 
           product = self.products_group.new_product_ref_for_target(native_target.product_name, native_target.product_type)
           native_target.product_reference = product
