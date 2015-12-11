@@ -15,9 +15,11 @@ module Xcake
         def self.build_phase_generators
           [
               CompileSourceBuildPhase,
-              HeaderFileBuildPhase,
+              HeadersBuildPhase,
               CopyXCAssetsBuildPhase,
-              CopyResourcesBuildPhase
+              CopyResourcesBuildPhase,
+              HeadersBuildPhase,
+              ResourcesBuildPhase
           ]
         end
 
