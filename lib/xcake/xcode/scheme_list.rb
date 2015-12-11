@@ -119,10 +119,9 @@ module Xcake
 
           puts "Saving Scheme #{s.name}..."
           s.save_as(@project.path, s.name, true)
-          s.share_scheme(@project.path, s.name)
-          # @xcschememanagement['SchemeUserState']["#{s.name}.xcscheme_^#shared#^_"] = {
-          #   "isShown" => true
-          # }
+          @xcschememanagement['SchemeUserState']["#{s.name}.xcscheme_^#shared#^_"] = {
+            "isShown" => true
+          }
         end
 
         puts "Saving Scheme List..."
